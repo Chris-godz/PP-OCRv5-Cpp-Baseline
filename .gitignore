@@ -1,0 +1,8 @@
+PaddleOCR/
+build/
+logs/
+models/
+output/
+images/
+.cache/
+TensorRT-*/

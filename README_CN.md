@@ -1,31 +1,32 @@
-# PP-OCRv5 C++ Benchmark
+# PP-OCRv5 C++ 基准测试
 
-[中文 README](README_CN.md)
+[English README](README.md)
 
-🚀 PP-OCRv5 C++ benchmarking toolchain with GPU acceleration and comprehensive performance evaluation.
+🚀 PP-OCRv5 C++ 基准测试工具链，使用 GPU 加速和完整性能评估
 
-## 📈 Performance Results
 
-### XFUND Dataset Overview
+## 📈 性能表现
 
-This project uses the [XFUND](https://github.com/doc-analysis/XFUND) dataset for benchmarking. XFUND (eXtended FUnctional Needs Dataset) is a large-scale multilingual form understanding dataset released by Microsoft, containing form images and structured annotations in 7 languages (Chinese, English, Japanese, Spanish, French, Italian, German).
+### XFUND 数据集介绍
 
-**Test Configuration**:
-- Dataset: XFUND Chinese validation set (50 images)
-- Model: PP-OCRv5 Server series full pipeline (high-precision configuration)
-  - Document orientation classification: PP-LCNet_x1_0_doc_ori
-  - Document rectification: UVDoc
-  - Text line orientation classification: PP-LCNet_x1_0_textline_ori
-  - Text detection: PP-OCRv5_server_det
-  - Text recognition: PP-OCRv5_server_rec
-- Hardware: Server-grade configuration with GPU acceleration support
+本项目使用 [XFUND](https://github.com/doc-analysis/XFUND) 数据集进行基准测试。XFUND（多语言表单理解数据集）是由微软发布的大规模多语言表单数据集，包含7种语言（中文、英文、日文、西班牙文、法文、意大利文、德文）的表单图像和对应的结构化标注。
+
+**测试配置**：
+- 数据集：XFUND 中文验证集（50张图像）
+- 模型：PP-OCRv5 Server 系列完整Pipeline（高精度配置）
+  - 文档方向分类：PP-LCNet_x1_0_doc_ori
+  - 文档矫正：UVDoc
+  - 文本行方向分类：PP-LCNet_x1_0_textline_ori
+  - 文本检测：PP-OCRv5_server_det
+  - 文本识别：PP-OCRv5_server_rec
+- 硬件：服务器级配置，支持GPU加速
   - GPU: NVIDIA GeForce RTX 4060 (8GB VRAM)
   - CPU: Intel Core i5-10210U (4 cores, 8 threads @ 1.60GHz)
-  - Memory: 32GB DDR4
-  - Operating System: Ubuntu 24.04.3 LTS
-  - CUDA Driver: 550.163.01
+  - 内存: 32GB DDR4
+  - 操作系统: Ubuntu 24.04.3 LTS
+  - CUDA 驱动: 550.163.01
 
-**Test Results**:
+**测试结果**：
 | Filename | Inference Time (ms) | FPS | CPS (chars/s) | Accuracy (%) |
 |---|---|---|---|---|
 | `zh_val_14.jpg` | 7914.49 | 0.13 | **156.80** | **61.71** |
@@ -80,46 +81,48 @@ This project uses the [XFUND](https://github.com/doc-analysis/XFUND) dataset for
 | `zh_val_15.jpg` | 7376.59 | 0.14 | **231.41** | **6.39** |
 | **Average** | - | **0.14** | **188.99** | **54.88** |
 
-## 🛠️ Quick Start
+## 🛠️ 快速开始
 
-### ⚡ Three Steps to Start Your OCR Benchmark
+### ⚡ 三步开始你的 OCR 基准测试
 
-**Step 1: Environment Setup**
+**第一步：环境配置**
 ```bash
 git clone https://github.com/Chris-godz/PP-OCRv5-Cpp-Baseline.git
 cd PP-OCRv5-Cpp-Baseline
 ./scripts/setup_environment.sh
 ```
 
-**Step 2: Install Dependencies**
+**第二步：依赖安装**
 ```bash
 ./scripts/compile_dependencies.sh
 ```
 
-**Step 3: Run Benchmark**
+**第三步：运行基准测试**
 ```bash
 ./scripts/startup.sh
 ```
 
-## 📁 Project Structure
+## 📁 项目结构
 
 ```
-├── CMakeLists.txt          # C++ build configuration
-├── src/Benchmark.cpp       # Main program (OCR inference + performance testing)
+├── CMakeLists.txt          # C++编译配置
+├── src/Benchmark.cpp       # 主程序（OCR推理+性能测试）
 ├── scripts/
-│   ├── startup.sh          # One-click run script
-│   ├── setup_environment.sh # Environment setup
-│   ├── compile_dependencies.sh # Dependency installation
-│   └── calculate_acc.py    # Accuracy calculation
-├── models/                 # Pre-trained model storage
-├── PaddleOCR/              # PaddleOCR source code (cloned)
-└── output/                 # Test results output
+│   ├── startup.sh          # 一键运行脚本
+│   ├── setup_environment.sh # 环境配置
+│   ├── compile_dependencies.sh # 依赖安装
+│   └── calculate_acc.py    # 准确率计算
+├── models/                 # 预训练模型存储
+├── PaddleOCR/              # PaddleOCR源码（克隆）
+└── output/                 # 测试结果输出
 ```
 
-## 📄 License
+## 📄 开源协议
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+本项目采用 Apache License 2.0 协议 - 详见 [LICENSE](LICENSE) 文件
 
-## 🙏 Acknowledgments
+## 🙏 致谢
 
-Thanks to the [PaddleOCR team](https://github.com/PaddlePaddle/PaddleOCR) for providing an excellent OCR framework.
+感谢 [PaddleOCR 团队](https://github.com/PaddlePaddle/PaddleOCR) 提供优秀的 OCR 框架
+
+---
