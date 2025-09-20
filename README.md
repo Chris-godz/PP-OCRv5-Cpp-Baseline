@@ -35,14 +35,14 @@ This project uses the [XFUND](https://github.com/doc-analysis/XFUND) dataset for
 | GPU Model | Average Inference Time (ms) | Average FPS | Average CPS (chars/s) | Average Accuracy (%) | 
 |---|---|---|---|---|
 | `RTX 4060` | 7195.17 | 0.14 | 188.99 | 54.88 |
-| `V100` | 3332.41 | .30 | 413.59 | 54.87 |
+| `V100` | 3332.41 | 0.30 | 413.59 | 54.87 |
 
 - [Detailed Performance Results of PP-OCRv5 on RTX 4060](./PP-OCRv5_on_4060.md)
 - [Detailed Performance Results of PP-OCRv5 on V100](./PP-OCRv5_on_V100.md)
 
 ## 🛠️ Quick Start
 
-### ⚡ Three Steps to Start Your OCR Benchmark
+### ⚡ Three Simple Steps to Start Your OCR Benchmark
 
 **Step 1: Environment Setup**
 ```bash
