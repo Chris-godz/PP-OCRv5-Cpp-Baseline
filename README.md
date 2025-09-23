@@ -6,12 +6,13 @@
 
 ## 📈 Performance Results
 
-### XFUND Dataset Overview
+### Custom Dataset Overview
 
-This project uses the [XFUND](https://github.com/doc-analysis/XFUND) dataset for benchmarking. XFUND (eXtended FUnctional Needs Dataset) is a large-scale multilingual form understanding dataset released by Microsoft, containing form images and structured annotations in 7 languages (Chinese, English, Japanese, Spanish, French, Italian, German).
+This project uses a diverse custom Chinese dataset for benchmarking. The dataset consists of various real-world scenarios including street signs, handwritten text, exam papers, textbooks, and newspapers, providing comprehensive coverage of different text recognition challenges with detailed annotations including text content and bounding box coordinates.
 
 **Test Configuration**:
-- Dataset: XFUND Chinese validation set (50 images)
+- Dataset: Custom Chinese document dataset (20 images)
+- Data Format: PNG images with JSON annotations containing text and bbox coordinates
 - Model: PP-OCRv5 Server series full pipeline (high-precision configuration)
   - Document orientation classification: PP-LCNet_x1_0_doc_ori
   - Document rectification: UVDoc
@@ -34,8 +35,8 @@ This project uses the [XFUND](https://github.com/doc-analysis/XFUND) dataset for
 **Benchmark Results**:
 | GPU Model | Average Inference Time (ms) | Average FPS | Average CPS (chars/s) | Average Accuracy (%) | 
 |---|---|---|---|---|
-| `RTX 4060` | 7195.17 | 0.14 | 188.99 | 54.88 |
-| `V100` | 3332.41 | 0.30 | 413.59 | 54.87 |
+| `RTX 4060` | 2234.11 | 0.70 | 465.87 | 92.34 |
+| `V100` | - | - | - | - |
 
 - [Detailed Performance Results of PP-OCRv5 on RTX 4060](./PP-OCRv5_on_4060.md)
 - [Detailed Performance Results of PP-OCRv5 on V100](./PP-OCRv5_on_V100.md)
@@ -71,8 +72,11 @@ cd PP-OCRv5-Cpp-Baseline
 │   ├── setup_environment.sh # Environment setup
 │   ├── compile_dependencies.sh # Dependency installation
 │   └── calculate_acc.py    # Accuracy calculation
-├── models/                 # Pre-trained model storage
-├── PaddleOCR/              # PaddleOCR source code (cloned)
+├── images/                 # Custom dataset (20 PNG images + labels.json)
+│   ├── image_1.png ~ image_20.png  # Test images
+│   └── labels.json         # Ground truth annotations
+├── models/                 # Pre-trained model storage (auto-downloaded)
+├── PaddleOCR/              # PaddleOCR source code (auto-cloned)
 └── output/                 # Test results output
 ```
 

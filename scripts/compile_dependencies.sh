@@ -671,7 +671,7 @@ main() {
     echo "4. Build PP-OCRv5 demo"
     echo
     echo "Working directory: $WORK_DIR"
-    echo "Estimated time: 2-3 hours"
+    echo "Estimated time: 1-2 hours"
     echo
     
     read -p "Continue with installation? (y/N): " -n 1 -r

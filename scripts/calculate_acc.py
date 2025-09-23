@@ -110,10 +110,10 @@ def calculate_word_error_rate(reference: str, hypothesis: str) -> Dict[str, floa
 
 def calculate_research_standard_accuracy(ground_truth: Dict, ocr_result: Dict, debug: bool = False) -> Dict:
     """
-    Calculate OCR accuracy using research-standard methods - FIXED for XFUND format
+    Calculate OCR accuracy using research-standard methods - UPDATED for custom dataset format
     """
     
-    # Extract ground truth texts from XFUND format - CORRECTED
+    # Extract ground truth texts from custom dataset format
     gt_texts = []
     if 'document' in ground_truth:
         for item in ground_truth['document']:
@@ -181,19 +181,20 @@ def calculate_research_standard_accuracy(ground_truth: Dict, ocr_result: Dict, d
     }
 
 def load_ground_truth_for_image(ground_truth_file: str, image_name: str) -> Optional[Dict]:
-    """Load ground truth data for a specific image - FIXED for XFUND format"""
+    """Load ground truth data for a specific image - UPDATED for custom dataset format"""
     try:
         with open(ground_truth_file, 'r', encoding='utf-8') as f:
             gt_data = json.load(f)
         
-        # XFUND format has documents array
-        documents = gt_data.get('documents', [])
-        image_base = os.path.splitext(image_name)[0]
-        
-        for doc in documents:
-            doc_id = doc.get('id', '')
-            if doc_id == image_base:
-                return doc
+        # Custom dataset format: direct image name keys
+        if image_name in gt_data:
+            # Convert custom format to expected format
+            texts = []
+            for item in gt_data[image_name]:
+                if 'text' in item:
+                    texts.append({'text': item['text']})
+            
+            return {'document': texts}
         
         print(f"Warning: Ground truth not found for image: {image_name}")
         return None
@@ -232,9 +233,9 @@ def calculate_accuracy():
 
 def main():
     parser = argparse.ArgumentParser(description='Calculate OCR accuracy for a single image')
-    parser.add_argument('--ground_truth', required=True, help='Path to the master ground truth JSON file (e.g., zh.val.json)')
+    parser.add_argument('--ground_truth', required=True, help='Path to the master ground truth JSON file (e.g., labels.json)')
     parser.add_argument('--output_dir', required=True, help='Directory containing OCR output JSON files')
-    parser.add_argument('--image_name', required=True, help='The specific image file name to process (e.g., zh_val_0.jpg)')
+    parser.add_argument('--image_name', required=True, help='The specific image file name to process (e.g., image_0.png)')
     parser.add_argument('--debug', action='store_true', help='Enable debug mode to print raw and normalized texts')
     parser.add_argument('--results_file', help=argparse.SUPPRESS) # Suppress help for this unused arg
 

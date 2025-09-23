@@ -334,7 +334,7 @@ int main(int argc, char* argv[]){
             // Calculate accuracy immediately after saving outputs
             std::cout << "  [ACCURACY] Calculating accuracy metrics..." << std::endl;
             std::string rootPath = get_root_path();
-            std::string ground_truth_path = rootPath + "/images/xfund/zh.val.json";
+            std::string ground_truth_path = rootPath + "/images/labels.json";
             
             // Extract just the filename for the python script
             std::string filename = image_path;

@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(PROJECT_ROOT "${CMAKE_SOURCE_DIR}")
 set(PADDLE_OCR_DIR "${PROJECT_ROOT}/PaddleOCR/deploy/cpp_infer")
 set(PADDLE_LIB "${PADDLE_OCR_DIR}/third_party/paddle_inference")
-set(OPENCV_DIR "${PADDLE_OCR_DIR}/third_party/opencv-4.7.0/build/third_party/opencv-4.7.0/opencv4/")
+set(OPENCV_DIR "${PADDLE_OCR_DIR}/third_party/opencv-4.7.0/opencv4/")
 set(PPOCR_SRC_DIR "${PADDLE_OCR_DIR}/src")
 
 # Get conda environment path (from environment variables)

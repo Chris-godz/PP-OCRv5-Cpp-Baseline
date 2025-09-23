@@ -452,6 +452,25 @@ configure_pip() {
         echo "  Pip index URL: $pip_index"
         
         log_success "Pip configured successfully"
+        
+        # Install required Python packages for OCR accuracy calculation
+        log_info "Installing required Python packages..."
+        local required_packages=(
+            "jiwer"
+            "numpy"
+            "opencv-python"
+        )
+        
+        for package in "${required_packages[@]}"; do
+            log_info "Installing $package..."
+            if pip install -i https://mirrors.ustc.edu.cn/pypi/simple "$package"; then
+                log_success "$package installed successfully"
+            else
+                log_warning "Failed to install $package, it may already be installed or will be installed later"
+            fi
+        done
+        
+        log_success "Python packages installation completed"
     else
         log_error "Pip not found. Please check Python installation."
         exit 1
@@ -579,7 +598,7 @@ main() {
     echo "Next steps:"
     echo "1. Restart your shell or run: source ~/.bashrc"
     echo "2. Activate conda environment: conda activate deepx"
-    echo "3. Run the dependency installation script: ./compile_dependencies.sh
+    echo "3. Run the dependency installation script: ./compile_dependencies.sh"
 }
 
 # Run main function

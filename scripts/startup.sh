@@ -45,6 +45,14 @@ if [[ "$CONDA_DEFAULT_ENV" != "deepx" ]]; then
 fi
 log "✓ Conda environment activated: $CONDA_DEFAULT_ENV"
 
+# Ensure required Python packages are installed
+log "Checking required Python packages..."
+if ! python -c "import jiwer" 2>/dev/null; then
+    log "Installing jiwer package for accuracy calculation..."
+    pip install jiwer
+fi
+log "✓ Required Python packages verified"
+
 # Set library paths for runtime
 export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
 log "✓ Library paths configured: $LD_LIBRARY_PATH"
@@ -182,50 +190,34 @@ fi
 # Dataset and Benchmark Functions
 # =============================================================================
 
-# Function to download and setup XFUND dataset
-setup_xfund_dataset() {
-    log "=== Setting up XFUND Dataset ==="
+# Function to verify custom dataset
+verify_custom_dataset() {
+    log "=== Verifying Custom Dataset ==="
     
     local images_dir="$PROJECT_ROOT/images"
-    local dataset_dir="$images_dir/xfund"
     
-    mkdir -p "$dataset_dir"
-    cd "$dataset_dir"
-    
-    # Download XFUND validation dataset
-    local xfund_base_url="https://github.com/doc-analysis/XFUND/releases/download/v1.0"
-    if [[ ! -f "zh.val.zip" ]]; then
-        log "Downloading XFUND validation dataset..."
-        wget -q "$xfund_base_url/zh.val.zip" || {
-            log "ERROR: Failed to download zh.val.zip"
-            return 1
-        }
-        log "✓ Downloaded zh.val.zip"
+    if [[ ! -d "$images_dir" ]]; then
+        log "ERROR: Images directory not found: $images_dir"
+        return 1
     fi
     
-    # Download validation annotations for ground truth
-    if [[ ! -f "zh.val.json" ]]; then
-        log "Downloading XFUND validation annotations..."
-        wget -q "$xfund_base_url/zh.val.json" || {
-            log "ERROR: Failed to download zh.val.json"
-            return 1
-        }
-        log "✓ Downloaded zh.val.json"
+    # Check for labels.json file
+    if [[ ! -f "$images_dir/labels.json" ]]; then
+        log "ERROR: Labels file not found: $images_dir/labels.json"
+        log "Please ensure you have labels.json file in your images directory"
+        return 1
     fi
     
-    # Extract validation images
-    if [[ ! -d "zh.val" ]] && [[ $(find . -maxdepth 1 -name "zh_val_*.jpg" | wc -l) -eq 0 ]]; then
-        log "Extracting validation images..."
-        unzip -q "zh.val.zip" || {
-            log "ERROR: Failed to extract zh.val.zip"
-            return 1
-        }
-        log "✓ Extracted validation images"
+    # Count image files
+    local img_count=$(find "$images_dir" -maxdepth 1 -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" | wc -l)
+    
+    if [[ $img_count -eq 0 ]]; then
+        log "ERROR: No image files found in $images_dir"
+        return 1
     fi
     
-    # Count images (they might be extracted directly to current directory)
-    local img_count=$(find . -maxdepth 2 -name "zh_val_*.jpg" | wc -l)
-    log "✓ Dataset ready: $img_count images in $dataset_dir"
+    log "✓ Custom dataset verified: $img_count images found"
+    log "✓ Ground truth labels file: $images_dir/labels.json"
     
     cd "$PROJECT_ROOT"
 }
@@ -374,21 +366,15 @@ run_batch_benchmark() {
     export LD_LIBRARY_PATH="$PADDLE_LIB_PATH/third_party/install/mklml/lib:$LD_LIBRARY_PATH"
     export LD_LIBRARY_PATH="$PADDLE_LIB_PATH/third_party/install/onednn/lib:$LD_LIBRARY_PATH"
     
-    # Setup dataset if needed
-    if [[ ! -d "images/xfund/zh.val" ]]; then
-        setup_xfund_dataset
-    fi
-    
-    # Check if images directory exists
+    # Verify custom dataset
     local images_dir="$PROJECT_ROOT/images"
-    if [[ ! -d "$images_dir" ]]; then
-        log "No images directory found, trying to setup XFUND dataset..."
-        setup_xfund_dataset
-        
-        if [[ ! -d "$images_dir" ]]; then
-            log "ERROR: No images directory found even after dataset setup"
-            return 1
-        fi
+    if ! verify_custom_dataset; then
+        log "ERROR: Custom dataset verification failed"
+        log "Please ensure you have:"
+        log "  1. Images directory: $images_dir/"
+        log "  2. Image files (*.png, *.jpg, *.jpeg) in the images directory"
+        log "  3. Ground truth labels: $images_dir/labels.json"
+        return 1
     fi
     
     # Create results directory
@@ -515,7 +501,7 @@ EOF
         log "Results saved to: $results_dir"
         
         # Calculate accuracy metrics
-        local ground_truth_file="$PROJECT_ROOT/images/xfund/zh.val.json"
+        local ground_truth_file="$PROJECT_ROOT/images/labels.json"
         if [[ -f "$ground_truth_file" ]]; then
             if calculate_accuracy "$results_dir" "$ground_truth_file"; then
                 log "✓ Accuracy calculation completed"
@@ -588,8 +574,8 @@ case "$COMMAND" in
         run_batch_benchmark
         ;;
     "setup-dataset")
-        log "Dataset setup mode"
-        setup_xfund_dataset
+        log "Dataset verification mode"
+        verify_custom_dataset
         ;;
     "rebuild")
         log "Force rebuild mode"
@@ -609,7 +595,7 @@ Usage: $0 [COMMAND]
 Commands:
   benchmark (default)     - Run comprehensive benchmark on images folder dataset
   build                   - Only build Benchmark.cpp (if needed)
-  setup-dataset           - Download and setup XFUND dataset in images folder
+  setup-dataset           - Verify custom dataset in images folder
   rebuild                 - Force rebuild and run benchmark
   clean                   - Clean build directory
 
@@ -617,15 +603,15 @@ Examples:
   $0                      # Run benchmark on images folder
   $0 benchmark           # Run benchmark on images folder  
   $0 build               # Build only (if needed)
-  $0 setup-dataset       # Setup XFUND dataset
+  $0 setup-dataset       # Verify custom dataset
   $0 rebuild             # Force rebuild and run benchmark
   $0 clean               # Clean build
 
 Dataset and Evaluation Features:
-  - Downloads XFUND Chinese validation dataset automatically
+  - Uses your custom dataset from images/ folder
   - Processes all images in images/ folder (supports .jpg, .png, .jpeg)
   - Calculates FPS (Frames Per Second) for each image
-  - Measures accuracy and success rate
+  - Measures accuracy and success rate using your labels.json
   - Generates comprehensive JSON results
   - Creates visualization outputs for each processed image
   - Supports both CPU and GPU benchmarking
