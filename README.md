@@ -36,7 +36,7 @@ This project uses a diverse custom Chinese dataset for benchmarking. The dataset
 | GPU Model | Average Inference Time (ms) | Average FPS | Average CPS (chars/s) | Average Accuracy (%) | 
 |---|---|---|---|---|
 | `RTX 4060` | 2234.11 | 0.70 | 465.87 | 92.34 |
-| `V100` | - | - | - | - |
+| `V100` | 792.80 | 2.10 | 1317.11 | 93.05 |
 
 - [Detailed Performance Results of PP-OCRv5 on RTX 4060](./PP-OCRv5_on_4060.md)
 - [Detailed Performance Results of PP-OCRv5 on V100](./PP-OCRv5_on_V100.md)
