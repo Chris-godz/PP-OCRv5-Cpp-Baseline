@@ -20,7 +20,7 @@ This project uses a diverse custom Chinese dataset for benchmarking. The dataset
   - Text detection: PP-OCRv5_server_det
   - Text recognition: PP-OCRv5_server_rec
 - Hardware configuration 1:
-  - GPU: NVIDIA GeForce RTX 4060 (8GB VRAM)
+  - GPU: NVIDIA GeForce RTX 4060 (8GB VRAM, laptop version)
   - CPU: Intel Core i5-10210U (4 cores, 8 threads @ 1.60GHz)
   - Memory: 32GB DDR4
   - Operating System: Ubuntu 24.04.3 LTS
