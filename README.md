@@ -1,3 +1,5 @@
+
+
 # PP-OCRv5 C++ Benchmark
 
 [中文 README](README_CN.md)
@@ -26,7 +28,7 @@ This project uses a diverse custom Chinese dataset for benchmarking. The dataset
   - Operating System: Ubuntu 24.04.3 LTS
   - CUDA Driver: 550.163.01
 - Hardware configuration 2:
-  - GPU: NVIDIA NVIDIA Tesla V100 (32GB VRAM)
+  - GPU: NVIDIA Tesla V100 (32GB VRAM)
   - CPU: Intel Xeon Gold 6271C
   - Memory: 512 GB DDR4
   - Operating System: Ubuntu 24.04.3 LTS
